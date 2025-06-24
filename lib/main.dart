@@ -165,29 +165,21 @@ class NumberItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return AnimatedContainer(
       margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+
+      duration: const Duration(milliseconds: 200),
+      curve: Curves.easeInOut,
+
       decoration: BoxDecoration(
         color: isSelected ? Colors.white : const Color.fromARGB(255, 0, 0, 0),
         borderRadius: BorderRadius.circular(15),
         border: Border.all(
-          color: isSelected ? Colors.black : Colors.grey.shade300,
+          color: isSelected ? Colors.black : const Color.fromARGB(255, 224, 224, 224),
           width: 1,
         ),
       ),
-      // AnimatedContainer(
-      //   duration: Duration(milliseconds: 300), 
-      //   curve: Curves.easeInOut,
-      //   decoration: BoxDecoration(
-      //     color: isSelected ? Colors.white : const Color.fromARGB(255, 0, 0, 0),
-      //     borderRadius: BorderRadius.circular(15),
-      //     border: Border.all(
-      //       color: isSelected ? Colors.black : Colors.grey.shade300,
-      //       width: 1,
-      //     ),
-      //   ),
-      // )
-      
+
       child: Row(
         children: [
           // Number
