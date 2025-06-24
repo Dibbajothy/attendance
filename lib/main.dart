@@ -11,6 +11,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Advanced Number Picker',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         brightness: Brightness.dark,
         useMaterial3: true,
@@ -28,9 +29,10 @@ class NumberPickerPage extends StatefulWidget {
 }
 
 class _NumberPickerPageState extends State<NumberPickerPage> {
-  int _selectedIndex = 14; // For 15 to be selected (0-indexed)
+  int _selectedIndex = 0; // For 15 to be selected (0-indexed)
   late FixedExtentScrollController _controller;
   final int _totalItems = 60;
+  bool _groupMode = false;
   
   @override
   void initState() {
@@ -45,7 +47,9 @@ class _NumberPickerPageState extends State<NumberPickerPage> {
   }
   
   void _scrollToNext() {
-    final nextIndex = (_selectedIndex + 1) % _totalItems;
+    // If group mode is on, scroll by 2, otherwise by 1
+    final steps = _groupMode ? 2 : 1;
+    final nextIndex = (_selectedIndex + steps) % _totalItems;
     _controller.animateToItem(
       nextIndex,
       duration: const Duration(milliseconds: 200),
@@ -54,49 +58,92 @@ class _NumberPickerPageState extends State<NumberPickerPage> {
   }
   
   void _scrollToPrevious() {
-    final prevIndex = (_selectedIndex - 1 + _totalItems) % _totalItems;
+    // If group mode is on, scroll by 2, otherwise by 1
+    final steps = _groupMode ? 2 : 1;
+    final prevIndex = (_selectedIndex - steps + _totalItems) % _totalItems;
     _controller.animateToItem(
       prevIndex,
       duration: const Duration(milliseconds: 200),
       curve: Curves.easeInOutCubic,
     );
   }
+  
+  void _toggleGroupMode() {
+    setState(() {
+      _groupMode = !_groupMode;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 0, 0, 0),
-      body: Center(
-        child: SizedBox(
-          height: 400,
-          width: 330,
-          child: ListWheelScrollView.useDelegate(
-            controller: _controller,
-            itemExtent: 80, // Height of each container
-            perspective: 0.006,
-            diameterRatio: 2.0,
-            physics: const FixedExtentScrollPhysics(),
-            onSelectedItemChanged: (index) {
-              setState(() {
-                _selectedIndex = index;
-              });
-            },
-            childDelegate: ListWheelChildBuilderDelegate(
-              childCount: _totalItems,
-              builder: (context, index) {
-                final number = index + 1;
-                final isSelected = index == _selectedIndex;
-                
-                return NumberItem(
-                  number: number,
-                  isSelected: isSelected,
-                  onCheckPressed: _scrollToNext,
-                  onCrossPressed: _scrollToPrevious,
-                );
-              },
+      body: Column(
+        children: [
+          // Group Button at the top
+          Padding(
+            padding: const EdgeInsets.only(top: 50.0, right: 20.0),
+            child: Align(
+              alignment: Alignment.topRight,
+              child: ElevatedButton(
+                onPressed: _toggleGroupMode,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: _groupMode 
+                      ? Colors.green 
+                      : const Color.fromARGB(255, 45, 45, 45),
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                ),
+                child: Text(
+                  'Group',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: _groupMode ? FontWeight.bold : FontWeight.normal,
+                  ),
+                ),
+              ),
             ),
           ),
-        ),
+          
+          // Number Picker
+          Expanded(
+            child: Center(
+              child: SizedBox(
+                height: 400,
+                width: 330,
+                child: ListWheelScrollView.useDelegate(
+                  controller: _controller,
+                  itemExtent: 80, // Height of each container
+                  perspective: 0.006,
+                  diameterRatio: 2.0,
+                  physics: const FixedExtentScrollPhysics(),
+                  onSelectedItemChanged: (index) {
+                    setState(() {
+                      _selectedIndex = index;
+                    });
+                  },
+                  childDelegate: ListWheelChildBuilderDelegate(
+                    childCount: _totalItems,
+                    builder: (context, index) {
+                      final number = index + 1;
+                      final isSelected = index == _selectedIndex;
+                      
+                      return NumberItem(
+                        number: number,
+                        isSelected: isSelected,
+                        onCheckPressed: _scrollToNext,
+                        onCrossPressed: _scrollToPrevious,
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -149,8 +196,8 @@ class NumberItem extends StatelessWidget {
           GestureDetector(
             onTap: onCheckPressed,
             child: Container(
-              width: 50,
-              height: 50,
+              width: 55,
+              height: 55,
               margin: const EdgeInsets.only(right: 10),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
@@ -168,8 +215,8 @@ class NumberItem extends StatelessWidget {
           GestureDetector(
             onTap: onCrossPressed,
             child: Container(
-              width: 50,
-              height: 50,
+              width: 55,
+              height: 55,
               margin: const EdgeInsets.only(right: 15),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
