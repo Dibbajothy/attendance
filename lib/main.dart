@@ -175,6 +175,19 @@ class NumberItem extends StatelessWidget {
           width: 1,
         ),
       ),
+      // AnimatedContainer(
+      //   duration: Duration(milliseconds: 300), 
+      //   curve: Curves.easeInOut,
+      //   decoration: BoxDecoration(
+      //     color: isSelected ? Colors.white : const Color.fromARGB(255, 0, 0, 0),
+      //     borderRadius: BorderRadius.circular(15),
+      //     border: Border.all(
+      //       color: isSelected ? Colors.black : Colors.grey.shade300,
+      //       width: 1,
+      //     ),
+      //   ),
+      // )
+      
       child: Row(
         children: [
           // Number
