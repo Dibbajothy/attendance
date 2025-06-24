@@ -168,7 +168,7 @@ class NumberItem extends StatelessWidget {
     return AnimatedContainer(
       margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
 
-      duration: const Duration(milliseconds: 200),
+      duration: const Duration(milliseconds: 100),
       curve: Curves.easeInOut,
 
       decoration: BoxDecoration(
