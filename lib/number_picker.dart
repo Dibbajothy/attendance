@@ -1,9 +1,13 @@
+// ignore_for_file: avoid_print, no_leading_underscores_for_local_identifiers
+
 import 'package:attendance/api_service.dart';
 import 'package:flutter/material.dart';
 
 
 class NumberPickerPage extends StatefulWidget {
-  const NumberPickerPage({super.key});
+
+  final List<String> studentsRoll;
+  const NumberPickerPage({super.key, required this.studentsRoll});
 
   @override
   State<NumberPickerPage> createState() => _NumberPickerPageState();
@@ -16,7 +20,8 @@ class _NumberPickerPageState extends State<NumberPickerPage> {
   bool _groupMode = false;
 
 
-  Map<int, int> _groupedNumbers = {};
+  final Map<int, int> _groupedNumbers = {};
+  final List<int> _customNumbers = [];
   
   
   @override
@@ -24,8 +29,9 @@ class _NumberPickerPageState extends State<NumberPickerPage> {
     super.initState();
     _controller = FixedExtentScrollController(initialItem: _selectedIndex);
 
-    for (int i = 1; i <= _totalItems; i++) {
-      _groupedNumbers[i] = -1;
+    for (int i = 0; i < widget.studentsRoll.length; i++) {
+      _groupedNumbers[int.parse(widget.studentsRoll[i])] = -1;
+      _customNumbers.add(int.parse(widget.studentsRoll[i]));
     }
 
   }
@@ -38,7 +44,9 @@ class _NumberPickerPageState extends State<NumberPickerPage> {
   
   void _present() {
 
-    _groupedNumbers[_selectedIndex + 1] =  1;
+    _groupedNumbers[_customNumbers[_selectedIndex]] =  1;
+
+
 
     final steps = _groupMode ? 2 : 1;
     final nextIndex = (_selectedIndex + steps) % _totalItems;
@@ -53,7 +61,7 @@ class _NumberPickerPageState extends State<NumberPickerPage> {
   
   void _absent() {
 
-    _groupedNumbers[_selectedIndex + 1] = 0;
+    _groupedNumbers[_customNumbers[_selectedIndex]] = 0;
 
     final steps = _groupMode ? 2 : 1;
     final nextIndex = (_selectedIndex + steps) % _totalItems;
@@ -74,7 +82,8 @@ class _NumberPickerPageState extends State<NumberPickerPage> {
 
   void _saveAttendance() {
 
-    final apiService = ApiService(baseUrl: 'http://192.168.0.197:8000');
+    final apiService = ApiService(baseUrl: 'https://attendance-backend-production-76c8.up.railway.app');
+    // final apiService = ApiService(baseUrl: 'http://192.168.0.197:8000');
 
     apiService.sendGroupedNumbers(_groupedNumbers).then((success) {
       if (success) {
@@ -86,12 +95,16 @@ class _NumberPickerPageState extends State<NumberPickerPage> {
     
   }
 
+
   int get presentCount => _groupedNumbers.values.where((status) => status == 1).length;
   int get absentCount => _groupedNumbers.values.where((status) => status == 0).length;
 
 
   @override
   Widget build(BuildContext context) {
+
+    // final List<int> _customNumbers = [1, 5, 50, 80, 82];
+    
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 0, 0, 0),
       body: Column(
@@ -147,12 +160,15 @@ class _NumberPickerPageState extends State<NumberPickerPage> {
               ),
             ),
           
+
+
           // Number Picker
           Expanded(
             child: Center(
               child: SizedBox(
                 height: 400,
                 width: 330,
+
                 child: ListWheelScrollView.useDelegate(
                   controller: _controller,
                   itemExtent: 80, // Height of each container
@@ -165,9 +181,11 @@ class _NumberPickerPageState extends State<NumberPickerPage> {
                     });
                   },
                   childDelegate: ListWheelChildBuilderDelegate(
-                    childCount: _totalItems,
+                    // childCount: _totalItems,
+                    childCount: _customNumbers.length,
                     builder: (context, index) {
-                      final number = index + 1;
+                      // final number = index + 1;
+                      final number = _customNumbers[index];
                       final isSelected = index == _selectedIndex;
                       
                       return NumberItem(
@@ -242,6 +260,9 @@ class NumberItem extends StatelessWidget {
     else if (isSelected && (groupedNumbers[number] == -1)) {
       return const Color.fromARGB(255, 255, 255, 255);
     }
+    else if (isSelected && (groupedNumbers[number] == null)) {
+      return const Color.fromARGB(255, 229, 255, 0);
+    }
     else {
       return const Color.fromARGB(255, 0, 0, 0);
     }
@@ -272,7 +293,6 @@ class NumberItem extends StatelessWidget {
       curve: Curves.easeInOut,
 
       decoration: BoxDecoration(
-        // color: isSelected ? Colors.white : const Color.fromARGB(255, 0, 0, 0),
         color: getBackgroundColor(),
         borderRadius: BorderRadius.circular(15),
         border: Border.all(

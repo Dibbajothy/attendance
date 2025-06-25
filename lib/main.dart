@@ -1,5 +1,6 @@
+import 'package:attendance/classroom.dart';
+import 'package:attendance/number_picker.dart';
 import 'package:flutter/material.dart';
-import 'number_picker.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +18,14 @@ class MyApp extends StatelessWidget {
         brightness: Brightness.dark,
         useMaterial3: true,
       ),
-      home: const NumberPickerPage(),
+
+
+      initialRoute: '/',
+      routes: {
+        '/': (context) => Classroom(),
+        '/attendance': (context) => NumberPickerPage(studentsRoll: []),
+      },
+
     );
   }
 }
