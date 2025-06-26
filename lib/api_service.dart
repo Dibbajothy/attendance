@@ -5,8 +5,9 @@ import 'package:http/http.dart' as http;
 
 class ApiService {
   final String baseUrl;
+  final String course;
   
-  ApiService({required this.baseUrl});
+  ApiService({required this.baseUrl, required this.course});
   
   Future<bool> sendGroupedNumbers(Map<int, int> groupedNumbers) async {
     try {
@@ -18,7 +19,7 @@ class ApiService {
       );
       
       final response = await http.post(
-        Uri.parse('$baseUrl/update-attendance'),
+        Uri.parse('$baseUrl/update-attendance/$course'),
         headers: {
           'Content-Type': 'application/json',
         },

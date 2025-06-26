@@ -5,7 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class Classroom extends StatefulWidget{
-  const Classroom({super.key});
+
+  final String course;
+
+  const Classroom({super.key, required this.course});
 
   @override
   State<Classroom> createState() => _ClassroomState();
@@ -29,7 +32,9 @@ class _ClassroomState extends State<Classroom> {
     });
     
     try {
-      final response = await http.get(Uri.parse('https://attendance-backend-production-76c8.up.railway.app/classroom'));
+      final response = await http.get(Uri.parse('https://attendance-backend-production-76c8.up.railway.app/classroom/${widget.course}'));
+      // print('http://192.168.0.197:8000/classroom/${widget.course}');
+      // print(widget.course);
       
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
@@ -81,7 +86,7 @@ class _ClassroomState extends State<Classroom> {
                   context,
                   MaterialPageRoute(
                     builder: (context) =>
-                        NumberPickerPage(studentsRoll: studentsRoll),
+                        NumberPickerPage(studentsRoll: studentsRoll, course: widget.course),
                   ),
                 );
               },

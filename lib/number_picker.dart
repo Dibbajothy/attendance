@@ -7,7 +7,9 @@ import 'package:flutter/material.dart';
 class NumberPickerPage extends StatefulWidget {
 
   final List<String> studentsRoll;
-  const NumberPickerPage({super.key, required this.studentsRoll});
+  final String course;
+
+  const NumberPickerPage({super.key, required this.studentsRoll, required this.course});
 
   @override
   State<NumberPickerPage> createState() => _NumberPickerPageState();
@@ -16,7 +18,7 @@ class NumberPickerPage extends StatefulWidget {
 class _NumberPickerPageState extends State<NumberPickerPage> {
   int _selectedIndex = 0;
   late FixedExtentScrollController _controller;
-  final int _totalItems = 60;
+  late final int _totalItems;
   bool _groupMode = false;
 
 
@@ -28,6 +30,7 @@ class _NumberPickerPageState extends State<NumberPickerPage> {
   void initState() {
     super.initState();
     _controller = FixedExtentScrollController(initialItem: _selectedIndex);
+    _totalItems = widget.studentsRoll.length;
 
     for (int i = 0; i < widget.studentsRoll.length; i++) {
       _groupedNumbers[int.parse(widget.studentsRoll[i])] = -1;
@@ -82,14 +85,29 @@ class _NumberPickerPageState extends State<NumberPickerPage> {
 
   void _saveAttendance() {
 
-    final apiService = ApiService(baseUrl: 'https://attendance-backend-production-76c8.up.railway.app');
-    // final apiService = ApiService(baseUrl: 'http://192.168.0.197:8000');
+    final apiService = ApiService(baseUrl: 'https://attendance-backend-production-76c8.up.railway.app', course: widget.course);
+    // final apiService = ApiService(baseUrl: 'http://192.168.0.197:8000', course: widget.course);
 
     apiService.sendGroupedNumbers(_groupedNumbers).then((success) {
       if (success) {
         print('Data sent successfully');
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Attendance saved successfully!'))
+        );
+
+        Navigator.pop(context);
+
+
+
       } else {
         print('Failed to send data');
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Failed to save attendance. Please try again.'))
+        );
+
+
       }
     });
     

@@ -1,5 +1,4 @@
-import 'package:attendance/classroom.dart';
-import 'package:attendance/number_picker.dart';
+import 'package:attendance/courses.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -22,8 +21,7 @@ class MyApp extends StatelessWidget {
 
       initialRoute: '/',
       routes: {
-        '/': (context) => Classroom(),
-        '/attendance': (context) => NumberPickerPage(studentsRoll: []),
+        '/': (context) => Courses(),
       },
 
     );
