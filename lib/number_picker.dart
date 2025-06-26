@@ -7,9 +7,10 @@ import 'package:flutter/material.dart';
 class NumberPickerPage extends StatefulWidget {
 
   final List<String> studentsRoll;
+  final List<String> studentsName;
   final String course;
 
-  const NumberPickerPage({super.key, required this.studentsRoll, required this.course});
+  const NumberPickerPage({super.key, required this.studentsRoll, required this.studentsName, required this.course});
 
   @override
   State<NumberPickerPage> createState() => _NumberPickerPageState();
@@ -204,11 +205,13 @@ class _NumberPickerPageState extends State<NumberPickerPage> {
                     builder: (context, index) {
                       // final number = index + 1;
                       final number = _customNumbers[index];
+                      final studentName = widget.studentsName[index];
                       final isSelected = index == _selectedIndex;
                       
                       return NumberItem(
                         groupedNumbers: _groupedNumbers,
                         number: number,
+                        studentName: studentName,
                         isSelected: isSelected,
                         onCheckPressed: _present,
                         onCrossPressed: _absent,
@@ -254,6 +257,7 @@ class _NumberPickerPageState extends State<NumberPickerPage> {
 class NumberItem extends StatelessWidget {
   final Map<int, int> groupedNumbers;
   final int number;
+  final String studentName;
   final bool isSelected;
   final VoidCallback onCheckPressed;
   final VoidCallback onCrossPressed;
@@ -261,6 +265,7 @@ class NumberItem extends StatelessWidget {
   const NumberItem({
     required this.groupedNumbers,
     required this.number,
+    required this.studentName,
     required this.isSelected,
     required this.onCheckPressed,
     required this.onCrossPressed,
@@ -325,13 +330,31 @@ class NumberItem extends StatelessWidget {
           Expanded(
             child: Padding(
               padding: const EdgeInsets.only(left: 20),
-              child: Text(
-                '$number',
-                style: TextStyle(
-                  fontSize: 36,
-                  fontWeight: FontWeight.bold,
-                  color: isSelected ? Colors.black : Colors.grey.shade400,
-                ),
+              child: Row(
+                children: [
+                  Text(
+                    '$number',
+                    style: TextStyle(
+                      fontSize: 36,
+                      fontWeight: FontWeight.bold,
+                      color: isSelected ? Colors.black : Colors.grey.shade400,
+                    ),
+                  ),
+
+                  const SizedBox(width: 7),
+                  
+                  Flexible(
+                    child: Text(
+                      studentName,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 3,
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: isSelected ? Colors.black : Colors.grey.shade400,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),

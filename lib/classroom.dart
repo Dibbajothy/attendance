@@ -18,6 +18,7 @@ class _ClassroomState extends State<Classroom> {
 
   final List<Map<String, dynamic>> students = [];
   List<String> studentsRoll = [];
+  List<String> studentsName = [];
   bool isLoading = true;
   
   @override
@@ -42,6 +43,7 @@ class _ClassroomState extends State<Classroom> {
         List<String> names = List<String>.from(data['Students Name']);
 
         studentsRoll = rolls;
+        studentsName = names;
         
         setState(() {
           students.clear();
@@ -86,7 +88,7 @@ class _ClassroomState extends State<Classroom> {
                   context,
                   MaterialPageRoute(
                     builder: (context) =>
-                        NumberPickerPage(studentsRoll: studentsRoll, course: widget.course),
+                        NumberPickerPage(studentsRoll: studentsRoll, studentsName : studentsName, course: widget.course),
                   ),
                 );
               },
