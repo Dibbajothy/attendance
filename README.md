@@ -6,10 +6,9 @@ This repo is the flutter (dart) codes that runs the front end do not carry the b
 
 ## Visuals
 ![image](https://github.com/user-attachments/assets/c56d3bda-16b6-484f-9035-db49ee40ae52)
-<img src="https://github.com/user-attachments/assets/b787f5b9-3642-47ea-88a5-3094c102e9e0" alt="Alt Text" width="400"/>
-![Screenshot_2025-07-05-02-07-23-110_com example attendance](https://github.com/user-attachments/assets/b787f5b9-3642-47ea-88a5-3094c102e9e0)
-![Screenshot_2025-07-05-02-07-26-981_com example attendance](https://github.com/user-attachments/assets/a2dca616-d16a-48d9-aedd-0603a1efe1b0)
-![Screenshot_2025-07-05-02-07-36-085_com example attendance](https://github.com/user-attachments/assets/0930c1f4-d8d4-47d4-8308-9fec15393806)
+<img src="https://github.com/user-attachments/assets/b787f5b9-3642-47ea-88a5-3094c102e9e0" alt="Alt Text" width="300"/>
+<img src="https://github.com/user-attachments/assets/a2dca616-d16a-48d9-aedd-0603a1efe1b0" alt="Alt Text" width="300"/>
+<img src="https://github.com/user-attachments/assets/0930c1f4-d8d4-47d4-8308-9fec15393806" alt="Alt Text" width="300"/>
 ![image](https://github.com/user-attachments/assets/fb09006b-69e7-4544-95a2-cf11934f5c4a)
 
 
